@@ -16,7 +16,7 @@ pipeline {
                     sh "echo ${DOCKER_CREDENTIALS_PSW} | docker login -u ${DOCKER_CREDENTIALS_USR} --password-stdin"
                     
                     // Build and push Docker image
-                    sh "docker build -t nishu23/node-app:latest ."
+                    sh 'cd node-app && docker build -t nishu23/node-app:latest .'
                     sh "docker push nishu23/node-app:latest"
 
                     // Deploy to Kubernetes
