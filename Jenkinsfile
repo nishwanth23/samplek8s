@@ -20,7 +20,7 @@ pipeline {
                     sh "docker push nishu23/node-app:latest"
 
                     // Deploy to Kubernetes
-                    sh "kubectl apply -f deployment.yaml"
+                    sh 'cd node-app && kubectl apply -f deployment.yaml'
                 }
             }
         }
