@@ -15,6 +15,7 @@ spec:
       containers:
       - name: node-app
         image: nishu23/node-app:latest
+        imagePullPolicy: Always  # Ensures new images are pulled in Jenkins builds
         ports:
         - containerPort: 3000
 ---
@@ -23,11 +24,11 @@ kind: Service
 metadata:
   name: node-app-service
 spec:
+  type: NodePort  # Minikube doesn't support LoadBalancer directly
   selector:
     app: node-app
   ports:
   - protocol: TCP
     port: 80
     targetPort: 3000
-  type: LoadBalancer
-
+    nodePort: 30080  # Choose a port between 30000-32767
