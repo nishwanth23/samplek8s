@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        DOCKER_CREDENTIALS = credentials('dockerhub-credentials')  // Securely fetch Docker credentials
-        KUBECONFIG = "/var/lib/jenkins/.kube/config"  // Correct path for Minikube
+        DOCKER_CREDENTIALS = credentials('dockerhub-credentials')
+        KUBECONFIG = "/var/lib/jenkins/.kube/config"  // Correct kubeconfig path
     }
     stages {
         stage('Clone Repository') {
@@ -20,7 +20,7 @@ pipeline {
                     sh 'cd node-app && docker build -t nishu23/node-app:latest .'
                     sh "docker push nishu23/node-app:latest"
 
-                    // Deploy to Kubernetes
+                    // Deploy to Kubernetes (Minikube)
                     sh 'cd node-app && kubectl apply -f deployment.yaml --validate=false'
                 }
             }
