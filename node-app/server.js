@@ -7,7 +7,7 @@ mongoose.connect('mongodb://mongodb-service:27017/mydatabase', { useNewUrlParser
     .catch(err => console.log(err));
 
 app.get('/', (req, res) => {
-    res.send('Hello from Node.js app running in Kubernetes!');
+    res.send('Hello from Tejaswini app running in Kubernetes!');
 });
 
 app.listen(3000, () => console.log('Server running on port 3000'));
