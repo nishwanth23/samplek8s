@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_CREDENTIALS = credentials('dockerhub-credentials')
-        KUBECONFIG = "/home/ubuntu/.kube/config"
+        KUBECONFIG = "/home/jenkins/.kube/config"
     }
     stages {
         stage('Clone Repository') {
