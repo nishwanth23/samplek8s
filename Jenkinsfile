@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS = credentials('dockerhub-credentials')
         KUBECONFIG = "/var/lib/jenkins/.kube/config"
-        SONARQUBE = 'jenkins-sonar' // Name of your SonarQube server configuration in Jenkins
+        SONARQUBE = 'nodeapp' // Name of your SonarQube server configuration in Jenkins
     }
     stages {
         stage('Clone Repository') {
@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     // Run SonarQube Scanner
-                    withSonarQubeEnv(jenkins-sonar) {
+                    withSonarQubeEnv(nodeapp) {
                         sh "sonar-scanner -Dsonar.projectKey=samplek8s -Dsonar.sources=."
                     }
                 }
