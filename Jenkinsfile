@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     // Run SonarQube Scanner
-                    withSonarQubeEnv(SONARQUBE) {
+                    withSonarQubeEnv(jenkins-sonar) {
                         sh "sonar-scanner -Dsonar.projectKey=samplek8s -Dsonar.sources=."
                     }
                 }
