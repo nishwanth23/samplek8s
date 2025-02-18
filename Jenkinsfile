@@ -4,8 +4,9 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS = credentials('dockerhub-credentials')
         KUBECONFIG = "/var/lib/jenkins/.kube/config"
-        SONARQUBE = 'nodeapp' // Name of the SonarQube configuration in Jenkins
+        SONARQUBE = 'nodeapp' // Name of your SonarQube configuration in Jenkins
         SONARQUBE_TOKEN = credentials('jenkins-sonar') // SonarQube authentication token
+        SONAR_HOST_URL = 'http://192.168.20.47:9000/' // Replace with your SonarQube server URL
     }
 
     stages {
@@ -20,10 +21,11 @@ pipeline {
                 script {
                     withSonarQubeEnv(SONARQUBE) {
                         sh '''
-                            /opt/sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner \
+                            export PATH=$PATH:/opt/sonar-scanner-5.0.1.3006-linux/bin
+                            sonar-scanner \
                             -Dsonar.projectKey=samplek8s \
                             -Dsonar.sources=. \
-                            -Dsonar.host.url=$SONARQUBE_URL \
+                            -Dsonar.host.url=$SONAR_HOST_URL \
                             -Dsonar.login=$SONARQUBE_TOKEN
                         '''
                     }
@@ -56,6 +58,7 @@ pipeline {
     post {
         always {
             script {
+                // Wait for SonarQube quality gate and fail pipeline if it does not pass
                 timeout(time: 10, unit: 'MINUTES') { // Increase timeout to 10 minutes
                     waitForQualityGate abortPipeline: true
                 }
