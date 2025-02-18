@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS = credentials('dockerhub-credentials')
         KUBECONFIG = "/var/lib/jenkins/.kube/config"
-        SONARQUBE = 'SonarQube' // Name of your SonarQube server configuration in Jenkins
+        SONARQUBE = 'jenkins-sonar' // Name of your SonarQube server configuration in Jenkins
     }
     stages {
         stage('Clone Repository') {
