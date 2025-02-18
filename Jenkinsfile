@@ -3,11 +3,22 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS = credentials('dockerhub-credentials')
         KUBECONFIG = "/var/lib/jenkins/.kube/config"
+        SONARQUBE = 'SonarQube' // Name of your SonarQube server configuration in Jenkins
     }
     stages {
         stage('Clone Repository') {
             steps {
                 git branch: 'main', credentialsId: 'github-credentials', url: 'https://github.com/nishwanth23/samplek8s.git'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    // Run SonarQube Scanner
+                    withSonarQubeEnv(SONARQUBE) {
+                        sh "sonar-scanner -Dsonar.projectKey=samplek8s -Dsonar.sources=."
+                    }
+                }
             }
         }
         stage('Build & Deploy to Kubernetes') {
@@ -29,6 +40,14 @@ pipeline {
                     // Update the deployment to use the new image version
                     sh "kubectl set image deployment/node-app node-app=nishu23/node-app:${IMAGE_TAG}"
                 }
+            }
+        }
+    }
+    post {
+        always {
+            // Wait for SonarQube analysis to complete and check the quality gate status
+            script {
+                waitForQualityGate abortPipeline: true
             }
         }
     }
