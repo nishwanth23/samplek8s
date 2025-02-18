@@ -7,7 +7,7 @@ mongoose.connect('mongodb://mongodb-service:27017/mydatabase', { useNewUrlParser
     .catch(err => console.log(err));
 
 app.get('/', (req, res) => {
-    res.send('Hello logus!');
+    res.send('Hello logus welcome!');
 });
 
 app.listen(3000, () => console.log('Server running on port 3000'));
