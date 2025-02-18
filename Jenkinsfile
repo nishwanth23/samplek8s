@@ -20,12 +20,11 @@ pipeline {
                 script {
                     withSonarQubeEnv(SONARQUBE) {
                         sh '''
-                            export PATH=$PATH:/opt/sonar-scanner-5.0.1.3006-linux/bin
-                            sonar-scanner \
+                            /opt/sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner \
                             -Dsonar.projectKey=samplek8s \
                             -Dsonar.sources=. \
-                            -Dsonar.host.url=$SONAR_HOST_URL \
-                            -Dsonar.login=$SONAR_AUTH_TOKEN
+                            -Dsonar.host.url=$SONARQUBE_URL \
+                            -Dsonar.login=$SONARQUBE_TOKEN
                         '''
                     }
                 }
@@ -57,8 +56,9 @@ pipeline {
     post {
         always {
             script {
-                // Wait for SonarQube quality gate and fail pipeline if it does not pass
-                waitForQualityGate abortPipeline: true
+                timeout(time: 10, unit: 'MINUTES') { // Increase timeout to 10 minutes
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
     }
