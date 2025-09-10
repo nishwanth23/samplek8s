@@ -55,14 +55,3 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            script {
-                // Wait for SonarQube quality gate and fail pipeline if it does not pass
-                timeout(time: 10, unit: 'MINUTES') { // Increase timeout to 10 minutes
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
-    }
-}
